@@ -2,7 +2,6 @@
 from flask import render_template
 from app import app
 from requests import *
-#from metar import Metar
 import re
 
 @app.route('/')
@@ -21,36 +20,39 @@ def parser():
         target_url = source + airport + '.TXT'
         airport_data = get(target_url).text.strip()
 
-        station_name = 'Airport ', airport, ':'
+        station_name = 'Airport {} :'.format(airport)
         try:
             temp = re.search(r'[-]?(?:\d{1,2}|\d{1,2}\.\d) C', airport_data).group(0)
+            temp1 = 'Temperature is {}'.format(temp)
             if float(temp.split()[0]) < temp_stop:
-                temperature = 'Attention! Temperature in airport ', airport, ' is below ', str(temp_stop), '.'
+                temperature = 'Attention! Temperature in airport {} is below {} C'.format(airport, temp_stop)
             else:
-                temperature = 'Temperature in airport', airport, 'area is normal!'
+                temperature = 'Temperature in airport {} is normal!'.format(airport)
         except:
             temperature = 'Sorry, temperature data is not available'
 
         try:
             wind_speed = re.search(r'(?:\d{1,2} MPH|Calm:0)', airport_data).group(0)
+            wind_speed1 = 'Wind speed is {}'.format(wind_speed)
             if wind_speed == 'Calm:0':
-                wind = 'Wind speed in airport', airport, ' is normal!'
+                wind = 'Wind speed in airport {} is normal!'.format(airport)
             elif int(wind_speed.split()[0]) < wind_stop:
-                wind = 'Wind speed in airport', airport, ' is normal!'
+                wind = 'Wind speed in airport is normal!'.format(airport)
             else:
-                wind = 'Attention! Wind speed in airport ', airport, 'is below ', str(wind_stop), '.'
+                wind = 'Attention! Wind speed in airport {} is below {} MPH.'.format(airport, wind_stop)
         except:
             wind = 'Sorry, wind speed data is not available'
 
         try:
             press = re.search(r'\d{3,4} hPa', airport_data).group(0)
+            press1 = 'Pressure is {}'. format(press)
             if int(press.split()[0]) < press_stop:
-                pressure = 'Attention! Pressure in airport ', airport, ' is below ', str(press_stop), '.'
+                pressure = 'Attention! Pressure in airport {} is below {} hPa.'.format(airport,press_stop)
             else:
-                pressure = 'Pressure in airport', airport, ' is normal!'
+                pressure = 'Pressure in airport {} is normal!'.format(airport)
         except:
             pressure = 'Sorry, pressure data is not available'
-        return render_template('index.html', station_name = station_name, temp =temp, temperature = temperature, wind_speed = wind_speed, wind = wind, press =press, pressure =pressure)
+        return render_template('index.html', station_name = station_name, temp =temp1, temperature = temperature, wind_speed = wind_speed1, wind = wind, press =press1, pressure =pressure)
 
 #def parser_cycle():
 #    for airport in airports:
