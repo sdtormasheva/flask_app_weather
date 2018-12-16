@@ -21,7 +21,7 @@ def parser():
         target_url = source + airport + '.TXT'
         airport_data = get(target_url).text.strip()
 
-        station_name = ('Airport ', airport, ':')
+        station_name = 'Airport ', airport, ':'
         try:
             temp = re.search(r'[-]?(?:\d{1,2}|\d{1,2}\.\d) C', airport_data).group(0)
             if float(temp.split()[0]) < temp_stop:
@@ -34,22 +34,22 @@ def parser():
         try:
             wind_speed = re.search(r'(?:\d{1,2} MPH|Calm:0)', airport_data).group(0)
             if wind_speed == 'Calm:0':
-                wind = ('Wind speed in airport', airport, ' is normal!')
+                wind = 'Wind speed in airport', airport, ' is normal!'
             elif int(wind_speed.split()[0]) < wind_stop:
-                wind = ('Wind speed in airport', airport, ' is normal!')
+                wind = 'Wind speed in airport', airport, ' is normal!'
             else:
-                wind = ('Attention! Wind speed in airport ', airport, 'is below ', str(wind_stop), '.')
+                wind = 'Attention! Wind speed in airport ', airport, 'is below ', str(wind_stop), '.'
         except:
-            wind = print('Sorry, wind speed data is not available')
+            wind = 'Sorry, wind speed data is not available'
 
         try:
             press = re.search(r'\d{3,4} hPa', airport_data).group(0)
             if int(press.split()[0]) < press_stop:
-                pressure = ('Attention! Pressure in airport ', airport, ' is below ', str(press_stop), '.')
+                pressure = 'Attention! Pressure in airport ', airport, ' is below ', str(press_stop), '.'
             else:
-                pressure = ('Pressure in airport', airport, 'area is normal!')
+                pressure = 'Pressure in airport', airport, ' is normal!'
         except:
-            pressure = ('Sorry, pressure data is not available')
+            pressure = 'Sorry, pressure data is not available'
         return render_template('index.html', station_name = station_name, temp =temp, temperature = temperature, wind_speed = wind_speed, wind = wind, press =press, pressure =pressure)
 
 #def parser_cycle():
