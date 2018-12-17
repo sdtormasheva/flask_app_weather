@@ -3,12 +3,10 @@
         <title>Weather</title>
     </head>
     <body>
-        <div><p>{{station_name}}</b></p></div>
-        <div><p>{{temp}}</b></p></div>
-        <div><p>{{temperature}}</b></p></div>
-        <div><p>{{wind_speed}}</b></p></div>
-        <div><p>{{wind}}</b></p></div>
-        <div><p>{{press}}</b></p></div>
-        <div><p>{{pressure}}</b></p></div>
+        {% for infor in info_all %}
+        <div><p><b><blockquote>{{infor.airport_info.airport }} :</blockquote></b></p></div>
+        <div><p><i> {{infor.report }} </i></p></div>
+        <hr />
+            {% endfor %}
     </body>
 </html>
